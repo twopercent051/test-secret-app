@@ -1,0 +1,41 @@
+services:
+
+  redis:
+    image: redis:7
+    container_name: test_secrets_redis
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+
+  postgres:
+    image: postgres:17
+    container_name: test_secrets_postgres
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+
+  app:
+    image: test_secrets_app
+    container_name: test_secrets_app
+    stop_signal: SIGINT
+    build:
+      context: .
+    logging:
+      options:
+        max-file: "5"
+        max-size: "3m"
+    command: sh -c "alembic upgrade head && python3 -m main"
+    restart: unless-stopped
+    ports:
+       - "${OUTER_PORT}:${INNER_PORT}"
+    environment:
+      - ".env"
+
+volumes:
+  redis_data:
+  postgres_data:

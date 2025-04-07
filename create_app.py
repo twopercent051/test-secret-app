@@ -35,5 +35,3 @@ DATABASE_URL = URL.create(
 )
 
 DATABASE_URL = DATABASE_URL.render_as_string(hide_password=False)
-
-

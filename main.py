@@ -9,7 +9,6 @@ from create_app import logger, config, scheduler
 from app.routers import router
 
 
-
 async def on_startup():
     logger.info("Starting App")
     scheduler.start()
@@ -31,7 +30,6 @@ app.include_router(router=router)
 
 app.add_middleware(ClientIPMiddleware)
 app.add_middleware(CacheControlMiddleware)
-
 
 
 async def main():

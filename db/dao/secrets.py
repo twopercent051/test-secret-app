@@ -28,9 +28,15 @@ class SecretsDAO(BaseDAO):
 
     @classmethod
     @retry_on_disconnect()
-    async def create_secret_with_log(cls, encoded_secret: str, encoded_passphrase: str, ttl_seconds: int | None, ip: str) -> SecretDTO:
+    async def create_secret_with_log(
+        cls, encoded_secret: str, encoded_passphrase: str, ttl_seconds: int | None, ip: str
+    ) -> SecretDTO:
         async with async_session_maker() as session:
-            secret_stmt = insert(cls.model).values(encoded_secret=encoded_secret, encoded_passphrase=encoded_passphrase, ttl_seconds=ttl_seconds).returning(cls.model)
+            secret_stmt = (
+                insert(cls.model)
+                .values(encoded_secret=encoded_secret, encoded_passphrase=encoded_passphrase, ttl_seconds=ttl_seconds)
+                .returning(cls.model)
+            )
             secret_result = await session.execute(secret_stmt)
             secret_row = secret_result.fetchone()[0]
             log_stmt = insert(LogModel).values(secret_id=secret_row.id, ip=ip, event="create")
@@ -40,8 +46,7 @@ class SecretsDAO(BaseDAO):
 
     @classmethod
     @retry_on_disconnect()
-    async def get_secret_with_log(cls, secret_id: int, encoded_passphrase: str,
-                                     ip: str) -> SecretDTO | None:
+    async def get_secret_with_log(cls, secret_id: int, encoded_passphrase: str, ip: str) -> SecretDTO | None:
         async with async_session_maker() as session:
             secret_query = select(cls.model).filter_by(id=secret_id, encoded_passphrase=encoded_passphrase).limit(1)
             secret_result = await session.execute(secret_query)

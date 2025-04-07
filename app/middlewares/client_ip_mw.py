@@ -12,4 +12,3 @@ class ClientIPMiddleware(BaseHTTPMiddleware):
         request.state.client_ip = client_host
         response = await call_next(request)
         return response
-

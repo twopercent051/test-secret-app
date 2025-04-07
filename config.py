@@ -38,6 +38,7 @@ class RedisConfig(BaseSettings):
         env_prefix="REDIS_",
     )
 
+
 class CryptoConfig(BaseSettings):
     secret_key: str
     passphrase_key: str
@@ -47,7 +48,6 @@ class CryptoConfig(BaseSettings):
         extra="ignore",
         env_prefix="CRYPTO_",
     )
-
 
 
 class Settings(BaseSettings):

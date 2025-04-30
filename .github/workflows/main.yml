@@ -14,24 +14,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-            # Шаг для проверки значения переменной ENV_FILE
-      - name: Debug ENV_FILE
-        run: echo "$ENV_FILE"
-        env:
-          ENV_FILE: ${{ secrets.ENV_FILE }}
-
       # Создание файла .env
       - name: Create .env file
         run: echo "$ENV_FILE" > .env
         env:
           ENV_FILE: ${{ secrets.ENV_FILE }}
-
-      # Проверка содержимого файла .env в логе
-      - name: Print .env file contents
-        run: cat .env
-        env:
-          ENV_FILE: ${{ secrets.ENV_FILE }}
-
 
       # Шаг 3. Запускаем docker-compose
       - name: Run Docker Compose
@@ -40,7 +27,3 @@ jobs:
       # Шаг 4. Проверяем список контейнеров
       - name: List all Docker containers
         run: docker ps -a
-
-      # Шаг 5. Завершаем работу контейнеров (опционально)
-      - name: Stop and remove containers
-        run: docker-compose -f docker-compose.yml down

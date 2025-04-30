@@ -16,7 +16,7 @@ jobs:
 
       # Шаг 2. Создаем файл .env
       - name: Create .env file
-        run: echo "$ENV_FILE" > .env
+        run: echo "$ENV_FILE" > .env && cat .env
         env:
           ENV_FILE: ${{ secrets.ENV_FILE }}
 

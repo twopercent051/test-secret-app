@@ -24,7 +24,7 @@ jobs:
 
       # Шаг 3. Запускаем docker-compose
       - name: Run Docker Compose
-        run: docker-compose -f docker-compose.yml up -d --build
+        run: docker compose up -d --build
         
       # Шаг 4. Проверяем список контейнеров
       - name: List all Docker containers

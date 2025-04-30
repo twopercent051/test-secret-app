@@ -18,9 +18,7 @@ jobs:
       - name: Create .env file
         run: echo "$ENV_FILE" > .env
         env:
-          ENV_FILE: |
-            KEY=value
-            ANOTHER_KEY=another_value
+          ENV_FILE: ${{ secrets.ENV_FILE }}
 
       # Шаг 3. Запускаем docker-compose
       - name: Run Docker Compose

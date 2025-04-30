@@ -1,4 +1,4 @@
-name: Test Self-Hosted Runner
+name: Test Self-Hosted Runner with Docker
 
 on:
   push:
@@ -6,16 +6,30 @@ on:
       - main
 
 jobs:
-  example-job:
-    # Указываем использование self-hosted runner
-    runs-on: self-hosted
-    
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-      
-      - name: Say Hello
-        run: echo "Hello, this is running on my self-hosted runner!"
+  docker-job:
+    runs-on: self-hosted # Указываем использовать self-hosted runner
 
-      - name: Display the runner name
-        run: hostname
+    steps:
+      # Шаг 1. Клонирование репозитория
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Шаг 2. Создаем файл .env
+      - name: Create .env file
+        run: echo "$ENV_FILE" > .env
+        env:
+          ENV_FILE: |
+            KEY=value
+            ANOTHER_KEY=another_value
+
+      # Шаг 3. Запускаем docker-compose
+      - name: Run Docker Compose
+        run: docker-compose -f docker-compose.yml up -d --build
+        
+      # Шаг 4. Проверяем список контейнеров
+      - name: List all Docker containers
+        run: docker ps -a
+
+      # Шаг 5. Завершаем работу контейнеров (опционально)
+      - name: Stop and remove containers
+        run: docker-compose -f docker-compose.yml down

@@ -1,0 +1,21 @@
+name: Test Self-Hosted Runner
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  example-job:
+    # Указываем использование self-hosted runner
+    runs-on: self-hosted
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      
+      - name: Say Hello
+        run: echo "Hello, this is running on my self-hosted runner!"
+
+      - name: Display the runner name
+        run: hostname
